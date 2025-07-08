@@ -22,3 +22,6 @@ instance/
 
 # Log files
 *.log
+
+# Flask-Migrate
+migrations/versions/
