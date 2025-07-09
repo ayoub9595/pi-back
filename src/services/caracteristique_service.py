@@ -1,28 +1,28 @@
-from models import db, CaracteristiqueEquipement
+from typing import List, Optional, Dict
+from src.dao.caracteristique_equipment_dao import CaracteristiqueEquipmentDAO
+from src.models.caracteristique_equipment import CaracteristiqueEquipment
 
-def get_all_caracteristiques():
-    return CaracteristiqueEquipement.query.all()
+class CaracteristiqueEquipmentService:
+    @staticmethod
+    def get_all_caracteristiques() -> List[Dict]:
+        caracteristiques = CaracteristiqueEquipmentDAO.get_all_caracteristiques()
+        return [carac.to_dict() for carac in caracteristiques]
+    
+    @staticmethod
+    def get_caracteristique_by_id(caracteristique_id: int) -> Optional[Dict]:
+        carac = CaracteristiqueEquipmentDAO.get_caracteristique_by_id(caracteristique_id)
+        return carac.to_dict() if carac else None
+    
+    @staticmethod
+    def create_caracteristique(caracteristique_data: Dict) -> Dict:
+        carac = CaracteristiqueEquipmentDAO.create_caracteristique(caracteristique_data)
+        return carac.to_dict()
+    
+    @staticmethod
+    def update_caracteristique(caracteristique_id: int, caracteristique_data: Dict) -> Optional[Dict]:
+        carac = CaracteristiqueEquipmentDAO.update_caracteristique(caracteristique_id, caracteristique_data)
+        return carac.to_dict() if carac else None
 
-def get_caracteristique_by_id(carac_id):
-    return CaracteristiqueEquipement.query.get_or_404(carac_id)
-
-def create_caracteristique(data):
-    new_carac = CaracteristiqueEquipement(
-        id_equipement=data['id_equipement'],
-        caracteristique=data['caracteristique']
-    )
-    db.session.add(new_carac)
-    db.session.commit()
-    return new_carac
-
-def update_caracteristique(carac_id, data):
-    carac = CaracteristiqueEquipement.query.get_or_404(carac_id)
-    carac.caracteristique = data.get('caracteristique', carac.caracteristique)
-    db.session.commit()
-    return carac
-
-def delete_caracteristique(carac_id):
-    carac = CaracteristiqueEquipement.query.get_or_404(carac_id)
-    db.session.delete(carac)
-    db.session.commit()
-    return True
+    @staticmethod
+    def delete_caracteristique(caracteristique_id: int) -> bool:
+        return CaracteristiqueEquipmentDAO.delete_caracteristique(caracteristique_id)

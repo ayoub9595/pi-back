@@ -17,6 +17,7 @@ class Equipment(db.Model):
         back_populates="equipement",
         cascade="all, delete-orphan"
     )
+
     
     def to_dict(self):
         return {
@@ -27,7 +28,8 @@ class Equipment(db.Model):
             'date_acquisition': self.date_acquisition.isoformat() if self.date_acquisition else None,
             'maintenance_prevue': self.maintenance_prevue.isoformat() if self.maintenance_prevue else None,
             'est_actif': self.est_actif,
-            'caracteristiques': [c.to_dict() for c in self.caracteristiques]
+            'caracteristiques': [c.to_dict() for c in self.caracteristiques],
+            'reclamations': [r.to_dict() for r in self.reclamations]
         }
 
     def __repr__(self):
