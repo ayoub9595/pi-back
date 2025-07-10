@@ -1,36 +1,29 @@
-import sys
-if sys.version_info >= (3, 13):
-    # Fix collections imports
-    import collections
-    import collections.abc
-    collections.defaultdict = collections.defaultdict
-    collections.MutableMapping = collections.abc.MutableMapping
-    sys.modules['collections'] = collections
-    
-    # Fix typing imports
-    import typing
-    typing.TYPE_CHECKING = False
-
 from flask import Flask
-from config import Config
-from src.models.equipment import db
 from flask_migrate import Migrate
+from src import db
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(Config)
     
-    # Initialize extensions
+    
+    app.config.from_object('config.Config')
+
+    
     db.init_app(app)
     migrate = Migrate(app, db)
+
+   
+    with app.app_context():
+        from src.models.equipment import Equipment
+        from src.models.caracteristique_equipement import CaracteristiqueEquipment
+     
+
     
-    # Import and register blueprints
     from src.controllers.equipment_controller import equipment_blueprint
-    app.register_blueprint(equipment_blueprint, url_prefix='/api/equipment')
-    
+
+    app.register_blueprint(equipment_blueprint, url_prefix="/equipements")
+
     return app
 
-app = create_app()
 
-if __name__ == '__main__':
-    app.run(debug=True)
+app = create_app()
