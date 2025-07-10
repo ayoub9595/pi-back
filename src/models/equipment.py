@@ -29,7 +29,6 @@ class Equipment(db.Model):
             'maintenance_prevue': self.maintenance_prevue.isoformat() if self.maintenance_prevue else None,
             'est_actif': self.est_actif,
             'caracteristiques': [c.to_dict() for c in self.caracteristiques],
-            'reclamations': [r.to_dict() for r in self.reclamations]
         }
 
     def __repr__(self):

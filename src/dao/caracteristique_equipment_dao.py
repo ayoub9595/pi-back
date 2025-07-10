@@ -1,5 +1,5 @@
 from typing import List, Optional
-from src.models.caracteristique_equipment import CaracteristiqueEquipment
+from src.models.caracteristique_equipement import CaracteristiqueEquipment
 from src import db
 
 class CaracteristiqueEquipmentDAO:

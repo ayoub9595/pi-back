@@ -22,7 +22,7 @@ class CaracteristiqueEquipment(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'id_equipment': self.id_equipement,
+            'id_equipement': self.id_equipement,
             'caracteristique': self.caracteristique,
             'valeur': self.valeur,
             'unite_mesure': self.unite_mesure,

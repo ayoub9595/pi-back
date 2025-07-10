@@ -1,6 +1,6 @@
 from typing import List, Optional, Dict
 from src.dao.caracteristique_equipment_dao import CaracteristiqueEquipmentDAO
-from src.models.caracteristique_equipment import CaracteristiqueEquipment
+from src.models.caracteristique_equipement import CaracteristiqueEquipment
 
 class CaracteristiqueEquipmentService:
     @staticmethod
@@ -12,7 +12,6 @@ class CaracteristiqueEquipmentService:
     def get_caracteristique_by_id(caracteristique_id: int) -> Optional[Dict]:
         carac = CaracteristiqueEquipmentDAO.get_caracteristique_by_id(caracteristique_id)
         return carac.to_dict() if carac else None
-    
     @staticmethod
     def create_caracteristique(caracteristique_data: Dict) -> Dict:
         carac = CaracteristiqueEquipmentDAO.create_caracteristique(caracteristique_data)
