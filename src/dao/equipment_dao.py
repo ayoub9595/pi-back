@@ -22,11 +22,12 @@ class EquipmentDAO:
     def update_equipment(equipment_id: int, equipment_data: dict) -> Optional[Equipment]:
         equipment = Equipment.query.get(equipment_id)
         if equipment:
-            for key, value in equipment_data.items():
-                setattr(equipment, key, value)
-            db.session.commit()
+          for key, value in equipment_data.items():
+            if key != "caracteristiques":
+              setattr(equipment, key, value)
+          db.session.commit()
         return equipment
-    
+
     @staticmethod
     def delete_equipment(equipment_id: int) -> bool:
         equipment = Equipment.query.get(equipment_id)

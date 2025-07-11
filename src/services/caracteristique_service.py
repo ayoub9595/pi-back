@@ -25,3 +25,11 @@ class CaracteristiqueEquipmentService:
     @staticmethod
     def delete_caracteristique(caracteristique_id: int) -> bool:
         return CaracteristiqueEquipmentDAO.delete_caracteristique(caracteristique_id)
+    
+    @staticmethod
+    def delete_by_equipement_id(equipment_id: int) -> None:
+      CaracteristiqueEquipmentDAO.delete_by_equipement_id(equipment_id)
+
+      
+
+

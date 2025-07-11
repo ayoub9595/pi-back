@@ -35,3 +35,9 @@ class CaracteristiqueEquipmentDAO:
             db.session.commit()
             return True
         return False
+    
+    @staticmethod
+    def delete_by_equipement_id(equipment_id: int) -> None:
+     CaracteristiqueEquipment.query.filter_by(id_equipement=equipment_id).delete()
+     db.session.commit()
+     

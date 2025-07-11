@@ -12,8 +12,6 @@ class CaracteristiqueEquipment(db.Model):
     valeur = db.Column(db.String(255))
     unite_mesure = db.Column(db.String(20))
     est_important = db.Column(db.Boolean, default=False)
-    
-    # Explicit relationship configuration
     equipement = relationship(
         "Equipment", 
         back_populates="caracteristiques"
