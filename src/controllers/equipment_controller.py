@@ -24,16 +24,18 @@ def create_equipment():
     equipment = EquipmentService.create_equipment(data)
     return jsonify(equipment), 201
 
-@equipment_blueprint.route('/<int:equipment_id>', methods=['PUT'])
-def update_equipment(equipment_id):
+@equipment_blueprint.route('/', methods=['PUT'])
+def update_equipment():
     data = request.get_json()
-    if not data:
-        return jsonify({'message': 'No input data provided'}), 400
+    if not data or 'id' not in data:
+        return jsonify({'message': 'No input data or ID provided'}), 400
     
+    equipment_id = data.pop('id')
     equipment = EquipmentService.update_equipment(equipment_id, data)
     if equipment:
         return jsonify(equipment)
     return jsonify({'message': 'Equipment not found'}), 404
+
 
 @equipment_blueprint.route('/<int:equipment_id>', methods=['DELETE'])
 def delete_equipment(equipment_id):

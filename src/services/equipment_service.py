@@ -1,7 +1,7 @@
 from typing import List, Optional, Dict
 from src.dao.equipment_dao import EquipmentDAO
-from src.models.equipment import Equipment
 from src.services.caracteristique_service import CaracteristiqueEquipmentService
+from src.dao.caracteristique_equipment_dao import CaracteristiqueEquipmentDAO 
 
 class EquipmentService:
     @staticmethod
@@ -33,9 +33,20 @@ class EquipmentService:
         return equipment.to_dict()
     
     @staticmethod
-    def update_equipment(equipment_id: int, equipment_data: Dict) -> Optional[Dict]:
-        equipment = EquipmentDAO.update_equipment(equipment_id, equipment_data)
-        return equipment.to_dict() if equipment else None
+    def update_equipment(equipment_id: int, data: Dict) -> Optional[Dict]:
+
+        equipment = EquipmentDAO.update_equipment(equipment_id, data)
+        if not equipment:
+            return None
+        if "caracteristiques" in data:
+            CaracteristiqueEquipmentDAO.delete_by_equipement_id(equipment_id)
+            for carac in data["caracteristiques"]:
+                CaracteristiqueEquipmentDAO.create_caracteristique({
+                    "id_equipement" : equipment_id,
+                    "caracteristique" : carac["caracteristique"],
+                    "valeur" : carac["valeur"]
+                })
+        return equipment.to_dict()
     
     @staticmethod
     def delete_equipment(equipment_id: int) -> bool:
