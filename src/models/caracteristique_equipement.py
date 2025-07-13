@@ -10,8 +10,6 @@ class CaracteristiqueEquipment(db.Model):
     id_equipement = db.Column(db.Integer, ForeignKey('equipment.id'), nullable=False)
     caracteristique = db.Column(db.String(255), nullable=False)
     valeur = db.Column(db.String(255))
-    unite_mesure = db.Column(db.String(20))
-    est_important = db.Column(db.Boolean, default=False)
     equipement = relationship(
         "Equipment", 
         back_populates="caracteristiques"
@@ -22,9 +20,7 @@ class CaracteristiqueEquipment(db.Model):
             'id': self.id,
             'id_equipement': self.id_equipement,
             'caracteristique': self.caracteristique,
-            'valeur': self.valeur,
-            'unite_mesure': self.unite_mesure,
-            'est_important': self.est_important
+            'valeur': self.valeur
         }
 
     def __repr__(self):
