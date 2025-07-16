@@ -15,6 +15,7 @@ class EquipmentDAO:
     def create_equipment(equipment_data: dict) -> Equipment:
         equipment = Equipment(**equipment_data)
         db.session.add(equipment)
+        db.session.flush()
         db.session.commit()
         return equipment
     

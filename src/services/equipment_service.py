@@ -7,6 +7,7 @@ class EquipmentService:
     @staticmethod
     def get_all_equipments() -> List[Dict]:
         equipments = EquipmentDAO.get_all_equipments()
+
         return [equipment.to_dict() for equipment in equipments]
     
     @staticmethod
