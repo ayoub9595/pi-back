@@ -9,7 +9,6 @@ class UtilisateurService:
             if field not in data:
                 raise ValueError(f"Le champ '{field}' est requis.")
 
-        # Vérifier unicité du CIN
         if UtilisateurDAO.get_utilisateur_by_cin(data['cin']):
             raise ValueError("Un utilisateur avec ce CIN existe déjà.")
 

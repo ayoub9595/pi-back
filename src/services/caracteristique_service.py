@@ -1,6 +1,5 @@
 from typing import List, Optional, Dict
 from src.dao.caracteristique_equipment_dao import CaracteristiqueEquipmentDAO
-from src.models.caracteristique_equipement import CaracteristiqueEquipment
 
 class CaracteristiqueEquipmentService:
     @staticmethod
