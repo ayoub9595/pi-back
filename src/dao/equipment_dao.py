@@ -1,5 +1,6 @@
 from typing import List, Optional
 from src.models.equipment import Equipment
+from src.models.affectation import Affectation
 from .. import db
 
 class EquipmentDAO:
@@ -37,3 +38,7 @@ class EquipmentDAO:
             db.session.commit()
             return True
         return False
+    @staticmethod
+    def get_unassigned_equipments():
+        subquery = db.session.query(Affectation.id_equipement).distinct().subquery()
+        return Equipment.query.filter(~Equipment.id.in_(subquery)).all()

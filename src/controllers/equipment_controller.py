@@ -1,11 +1,12 @@
 import traceback
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt
+from flask_jwt_extended import jwt_required, verify_jwt_in_request, get_jwt
 from sqlalchemy.exc import IntegrityError
 
 from src.services.equipment_service import EquipmentService
 
 equipment_blueprint = Blueprint('equipment', __name__)
+
 def is_admin():
     claims = get_jwt()
     return claims.get("role", "").upper() == "ADMIN"
@@ -70,3 +71,16 @@ def delete_equipment(equipment_id):
     if EquipmentService.delete_equipment(equipment_id):
         return jsonify({'message': 'Équipement supprimé'})
     return jsonify({'message': 'Équipement non trouvé'}), 404
+
+
+@equipment_blueprint.route('/unassigned', methods=['GET'])
+@jwt_required()
+def get_unassigned_equipments():
+    if not is_admin():
+        return jsonify({"msg": "Accès refusé : réservé aux administrateurs"}), 403
+    try:
+        equipments = EquipmentService.get_unassigned_equipments()
+        return jsonify(equipments), 200
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
