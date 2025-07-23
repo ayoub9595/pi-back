@@ -40,7 +40,7 @@ class AuthentificationService:
         access_token = create_access_token(
             identity=str(utilisateur.id),
             additional_claims={
-                "role": utilisateur.role.value,
+                "role": utilisateur.role.value.upper(),
                 "email": utilisateur.email
             }
         )

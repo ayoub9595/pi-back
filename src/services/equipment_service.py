@@ -22,6 +22,8 @@ class EquipmentService:
     
         equipment = EquipmentDAO.create_equipment(equipment_data)
 
+
+
         
         for carac in caracteristiques_data:
             carac_data = {
@@ -52,3 +54,8 @@ class EquipmentService:
     @staticmethod
     def delete_equipment(equipment_id: int) -> bool:
         return EquipmentDAO.delete_equipment(equipment_id)
+
+    @staticmethod
+    def get_unassigned_equipments() -> List[Dict]:
+        equipments = EquipmentDAO.get_unassigned_equipments()
+        return [equipment.to_dict() for equipment in equipments]

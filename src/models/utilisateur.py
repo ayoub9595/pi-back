@@ -1,4 +1,5 @@
 from enum import Enum
+from sqlalchemy.orm import relationship
 from src import db
 from sqlalchemy import Enum as SqlEnum
 
@@ -15,6 +16,7 @@ class Utilisateur(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     telephone = db.Column(db.String(20), nullable=True)
     role = db.Column(SqlEnum(UserRole), nullable=False, default=UserRole.UTILISATEUR)
+    affectations = relationship("Affectation", back_populates="utilisateur", cascade="all, delete-orphan")
 
     def to_dict(self):
         return {

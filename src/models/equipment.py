@@ -19,6 +19,8 @@ class Equipment(db.Model):
         cascade="all, delete-orphan"
     )
 
+    affectations = relationship("Affectation", back_populates="equipement", cascade="all, delete-orphan")
+
     def to_dict(self):
         def format_date(d):
             if isinstance(d, (datetime.date, datetime.datetime)):
