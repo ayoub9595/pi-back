@@ -1,11 +1,20 @@
+from functools import wraps
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt
-
-from src.decorators.auth_decorators import admin_required
 from src.services.affectation_service import AffectationService
 
 affectation_bp = Blueprint('affectation', __name__)
 
+def admin_required(f):
+    """Decorator that combines JWT authentication and admin role checking"""
+    @wraps(f)
+    @jwt_required()
+    def decorated_function(*args, **kwargs):
+        claims = get_jwt()
+        if claims.get("role", "").upper() != "ADMIN":
+            return jsonify({"msg": "Accès refusé : réservé aux administrateurs"}), 403
+        return f(*args, **kwargs)
+    return decorated_function
 
 @affectation_bp.route('/', methods=['GET'])
 @admin_required
