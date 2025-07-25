@@ -7,29 +7,29 @@ from src.dao.affectation_dao import AffectationDAO
 class AffectationService:
 
     @staticmethod
-    def lister_affectations():
-      affectations = AffectationDAO.get_all()
-      result = []
-      for a in affectations:
-        result.append({
+    def _format_affectation(a):
+        return {
             'id': a.id,
             'id_equipement': a.id_equipement,
-            'nom_equipement': a.equipement.nom if a.equipement else None,
+            'equipement': a.equipement.to_dict() if a.equipement else None,
             'id_utilisateur': a.id_utilisateur,
-            'nom_utilisateur': a.utilisateur.nom if a.utilisateur else None,
+            'utilisateur': a.utilisateur.to_dict() if a.utilisateur else None,
             'date_debut': a.date_debut.isoformat() if a.date_debut else None,
             'date_fin': a.date_fin.isoformat() if a.date_fin else None,
             'determine': a.determine
-        })
-      return result
+        }
+
+    @staticmethod
+    def lister_affectations():
+        affectations = AffectationDAO.get_all()
+        return [AffectationService._format_affectation(a) for a in affectations]
 
     @staticmethod
     def recuperer_affectation(affectation_id):
         affectation = AffectationDAO.get_by_id(affectation_id)
         if not affectation:
             raise ValueError("Affectation introuvable")
-        return affectation
-
+        return AffectationService._format_affectation(affectation)
 
     @staticmethod
     def creer_affectation(data):
@@ -61,7 +61,8 @@ class AffectationService:
             )
         except IntegrityError:
             raise ValueError("Erreur d'intégrité lors de la création")
-        return affectation
+
+        return AffectationService._format_affectation(affectation)
 
     @staticmethod
     def mettre_a_jour_affectation(affectation_id, data):
@@ -92,10 +93,15 @@ class AffectationService:
         except IntegrityError:
             raise ValueError("Erreur d'intégrité lors de la mise à jour")
 
-        return updated
+        return AffectationService._format_affectation(updated)
 
     @staticmethod
     def supprimer_affectation(affectation_id):
         success = AffectationDAO.delete(affectation_id)
         if not success:
             raise ValueError("Affectation introuvable")
+
+    @staticmethod
+    def lister_affectations_par_utilisateur(utilisateur_id):
+        affectations = AffectationDAO.get_by_utilisateur_id(utilisateur_id)
+        return [AffectationService._format_affectation(a) for a in affectations]

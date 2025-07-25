@@ -57,5 +57,8 @@ class AffectationDAO:
         db.session.delete(affectation)
         db.session.commit()
         return True
+    @staticmethod
+    def get_by_utilisateur_id(utilisateur_id):
+       return Affectation.query.filter_by(id_utilisateur=utilisateur_id).all()
 
 

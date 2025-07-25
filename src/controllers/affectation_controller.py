@@ -18,7 +18,7 @@ def lister_affectations():
 def recuperer_affectation(affectation_id):
     try:
         affectation = AffectationService.recuperer_affectation(affectation_id)
-        return jsonify(affectation.to_dict()), 200
+        return jsonify(affectation), 200
     except ValueError as e:
         return jsonify({"msg": str(e)}), 404
 
@@ -29,7 +29,7 @@ def creer_affectation():
     data['determine'] = data.get('determine', False)
     try:
         affectation = AffectationService.creer_affectation(data)
-        return jsonify(affectation.to_dict()), 201
+        return jsonify(affectation), 201
     except ValueError as e:
         return jsonify({"msg": str(e)}), 400
 
@@ -39,7 +39,7 @@ def mettre_a_jour_affectation(affectation_id):
     data = request.json
     try:
         affectation = AffectationService.mettre_a_jour_affectation(affectation_id, data)
-        return jsonify(affectation.to_dict()), 200
+        return jsonify(affectation), 200
     except ValueError as e:
         return jsonify({"msg": str(e)}), 404
 
@@ -51,3 +51,15 @@ def supprimer_affectation(affectation_id):
         return jsonify({"msg": "Affectation supprimée"}), 200
     except ValueError as e:
         return jsonify({"msg": str(e)}), 404
+
+
+@affectation_bp.route('/utilisateur/<int:utilisateur_id>', methods=['GET'])
+@jwt_required()
+def get_affectations_utilisateur(utilisateur_id):
+    jwt_data = get_jwt()
+    role = jwt_data.get('role')
+    sub = jwt_data.get('sub')
+    if role != "ADMIN" and sub != str(utilisateur_id):
+        return jsonify({"msg": "Accès refusé"}), 403
+    affectations = AffectationService.lister_affectations_par_utilisateur(utilisateur_id)
+    return jsonify(affectations), 200
