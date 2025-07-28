@@ -1,65 +1,54 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt
-
-from src.decorators.auth_decorators import admin_required
+from flask_jwt_extended import jwt_required
 from src.services.affectation_service import AffectationService
+from src.decorators.auth_decorators import admin_required, admin_or_self_required
+from src.decorators.error_handlers import handle_value_error
 
 affectation_bp = Blueprint('affectation', __name__)
-
 
 @affectation_bp.route('/', methods=['GET'])
 @admin_required
 def lister_affectations():
-    affectations = AffectationService.lister_affectations()
-    return jsonify(affectations), 200
+    return jsonify(AffectationService.lister_affectations()), 200
 
 @affectation_bp.route('/<int:affectation_id>', methods=['GET'])
 @admin_required
+@handle_value_error
 def recuperer_affectation(affectation_id):
-    try:
-        affectation = AffectationService.recuperer_affectation(affectation_id)
-        return jsonify(affectation), 200
-    except ValueError as e:
-        return jsonify({"msg": str(e)}), 404
+    return jsonify(AffectationService.recuperer_affectation(affectation_id)), 200
 
 @affectation_bp.route('/', methods=['POST'])
 @admin_required
+@handle_value_error
 def creer_affectation():
-    data = request.json
+    data = request.json or {}
     data['determine'] = data.get('determine', False)
-    try:
-        affectation = AffectationService.creer_affectation(data)
-        return jsonify(affectation), 201
-    except ValueError as e:
-        return jsonify({"msg": str(e)}), 400
+    return jsonify(AffectationService.creer_affectation(data)), 201
 
 @affectation_bp.route('/<int:affectation_id>', methods=['PUT'])
 @admin_required
+@handle_value_error
 def mettre_a_jour_affectation(affectation_id):
-    data = request.json
-    try:
-        affectation = AffectationService.mettre_a_jour_affectation(affectation_id, data)
-        return jsonify(affectation), 200
-    except ValueError as e:
-        return jsonify({"msg": str(e)}), 404
+    return jsonify(AffectationService.mettre_a_jour_affectation(affectation_id, request.json)), 200
 
 @affectation_bp.route('/<int:affectation_id>', methods=['DELETE'])
 @admin_required
+@handle_value_error
 def supprimer_affectation(affectation_id):
-    try:
-        AffectationService.supprimer_affectation(affectation_id)
-        return jsonify({"msg": "Affectation supprimée"}), 200
-    except ValueError as e:
-        return jsonify({"msg": str(e)}), 404
-
+    AffectationService.supprimer_affectation(affectation_id)
+    return jsonify({"msg": "Affectation supprimée"}), 200
 
 @affectation_bp.route('/utilisateur/<int:utilisateur_id>', methods=['GET'])
 @jwt_required()
+@admin_or_self_required()
 def get_affectations_utilisateur(utilisateur_id):
-    jwt_data = get_jwt()
-    role = jwt_data.get('role')
-    sub = jwt_data.get('sub')
-    if role != "ADMIN" and sub != str(utilisateur_id):
-        return jsonify({"msg": "Accès refusé"}), 403
     affectations = AffectationService.lister_affectations_par_utilisateur(utilisateur_id)
     return jsonify(affectations), 200
+
+@affectation_bp.route('/utilisateur/<int:utilisateur_id>/equipements-actifs', methods=['GET'])
+@jwt_required()
+@admin_or_self_required()
+def get_equipements_actifs_utilisateur(utilisateur_id):
+    equipements = AffectationService.get_equipements_actifs_par_utilisateur(utilisateur_id)
+    return jsonify(equipements), 200
+
