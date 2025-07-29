@@ -1,5 +1,6 @@
-from src.models.affectation import Affectation
 from src import db
+from src.models.affectation import Affectation
+from src.models.equipment import Equipment
 
 class AffectationDAO:
 
@@ -61,4 +62,10 @@ class AffectationDAO:
     def get_by_utilisateur_id(utilisateur_id):
        return Affectation.query.filter_by(id_utilisateur=utilisateur_id).all()
 
+    @staticmethod
+    def get_equipements_actifs_by_utilisateur_id(utilisateur_id):
+      return db.session.query(Equipment).join(Affectation).filter(
+        Affectation.id_utilisateur == utilisateur_id,
+        Equipment.est_actif == True
+      ).all()
 

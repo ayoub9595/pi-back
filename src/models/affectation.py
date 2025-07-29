@@ -11,7 +11,7 @@ class Affectation(db.Model):
     id_utilisateur = db.Column(db.Integer, db.ForeignKey('utilisateurs.id'), nullable=False)
     date_debut = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     date_fin = db.Column(db.DateTime, nullable=True)
-    determine = db.Column(db.Boolean, default=False, nullable=False)  # <== Nouveau champ
+    determine = db.Column(db.Boolean, default=False, nullable=False)
 
     equipement = relationship("Equipment", back_populates="affectations")
     utilisateur = relationship("Utilisateur", back_populates="affectations")

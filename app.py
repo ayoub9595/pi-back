@@ -3,6 +3,7 @@ from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from flask_cors import CORS
 from src import db
+from src.controllers.reclamation_controller import reclamation_bp
 
 def create_app():
     app = Flask(__name__)
@@ -12,9 +13,8 @@ def create_app():
     db.init_app(app)
     migrate = Migrate(app, db)
     jwt = JWTManager(app)
-
-    # Configure CORS ici pour autoriser toutes les origines et méthodes
     CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
 
     from src.controllers.equipment_controller import equipment_blueprint
     from src.controllers.utilisateur_controller import utilisateur_bp
@@ -25,6 +25,7 @@ def create_app():
     app.register_blueprint(utilisateur_bp, url_prefix="/utilisateurs")
     app.register_blueprint(authentication_bp, url_prefix="/auth")
     app.register_blueprint(affectation_bp, url_prefix="/affectations")
+    app.register_blueprint(reclamation_bp, url_prefix="/reclamations")
 
     return app
 

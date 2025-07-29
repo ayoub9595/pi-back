@@ -20,6 +20,7 @@ class Equipment(db.Model):
     )
 
     affectations = relationship("Affectation", back_populates="equipement", cascade="all, delete-orphan")
+    reclamations = relationship("Reclamation", back_populates="equipement", cascade="all, delete-orphan")
 
     def to_dict(self):
         def format_date(d):

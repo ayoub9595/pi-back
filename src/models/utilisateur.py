@@ -17,6 +17,8 @@ class Utilisateur(db.Model):
     telephone = db.Column(db.String(20), nullable=True)
     role = db.Column(SqlEnum(UserRole), nullable=False, default=UserRole.UTILISATEUR)
     affectations = relationship("Affectation", back_populates="utilisateur", cascade="all, delete-orphan")
+    reclamations = relationship("Reclamation", back_populates="utilisateur", cascade="all, delete-orphan")
+
 
     def to_dict(self):
         return {
