@@ -62,10 +62,17 @@ class AffectationDAO:
     def get_by_utilisateur_id(utilisateur_id):
        return Affectation.query.filter_by(id_utilisateur=utilisateur_id).all()
 
+
+
     @staticmethod
-    def get_equipements_actifs_by_utilisateur_id(utilisateur_id):
-      return db.session.query(Equipment).join(Affectation).filter(
-        Affectation.id_utilisateur == utilisateur_id,
-        Equipment.est_actif == True
-      ).all()
+    def supprimer_par_utilisateur_et_equipement(utilisateur_id, equipement_id):
+        affectation = Affectation.query.filter_by(
+            id_utilisateur=utilisateur_id,
+            id_equipement=equipement_id
+        ).first()
+        if affectation:
+            db.session.delete(affectation)
+            db.session.commit()
+            return True
+        return False
 

@@ -1,10 +1,11 @@
 from functools import wraps
 from flask import jsonify
-from flask_jwt_extended import get_jwt
+from flask_jwt_extended import get_jwt,  verify_jwt_in_request
 
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        verify_jwt_in_request()
         claims = get_jwt()
         if claims.get("role", "").upper() != "ADMIN":
             return jsonify({"msg": "Accès refusé : réservé aux administrateurs"}), 403

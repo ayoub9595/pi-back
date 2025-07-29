@@ -59,3 +59,8 @@ class EquipmentService:
     def get_unassigned_equipments() -> List[Dict]:
         equipments = EquipmentDAO.get_unassigned_equipments()
         return [equipment.to_dict() for equipment in equipments]
+
+    @staticmethod
+    def get_equipements_actifs_par_utilisateur(utilisateur_id):
+        equipements = EquipmentDAO.get_equipements_actifs_by_utilisateur_id(utilisateur_id)
+        return [e.to_dict() for e in equipements]

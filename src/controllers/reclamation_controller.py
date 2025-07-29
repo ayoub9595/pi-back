@@ -31,3 +31,25 @@ def create():
         return jsonify(reclamation), 201
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
+
+@reclamation_bp.route('/<int:id>', methods=['PUT'])
+@jwt_required()
+def update(id):
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    try:
+        reclamation = ReclamationService.mettre_a_jour_reclamation(id, data)
+        return jsonify(reclamation), 200
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 404
+
+@reclamation_bp.route('/utilisateur/<int:utilisateur_id>', methods=['GET'])
+@jwt_required()
+def get_reclamations_par_utilisateur(utilisateur_id):
+    try:
+        reclamations = ReclamationService.lister_reclamations_par_utilisateur(utilisateur_id)
+        return jsonify(reclamations), 200
+    except Exception as e:
+        return jsonify({"msg": str(e)}), 500

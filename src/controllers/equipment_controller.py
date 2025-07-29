@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
+
 from src.services.equipment_service import EquipmentService
-from src.decorators.auth_decorators import admin_required
+from src.decorators.auth_decorators import admin_required, admin_or_self_required
 from src.decorators.error_handlers import handle_integrity_error
 
 equipment_blueprint = Blueprint('equipment', __name__)
@@ -52,3 +54,11 @@ def delete_equipment(equipment_id):
 @admin_required
 def get_unassigned_equipments():
     return jsonify(EquipmentService.get_unassigned_equipments()), 200
+
+
+@equipment_blueprint.route('/utilisateur/<int:utilisateur_id>/equipements-actifs', methods=['GET'])
+@jwt_required()
+@admin_or_self_required()
+def get_equipements_actifs_utilisateur(utilisateur_id):
+    equipements = EquipmentService.get_equipements_actifs_par_utilisateur(utilisateur_id)
+    return jsonify(equipements), 200

@@ -105,7 +105,3 @@ class AffectationService:
     def lister_affectations_par_utilisateur(utilisateur_id):
         affectations = AffectationDAO.get_by_utilisateur_id(utilisateur_id)
         return [AffectationService._format_affectation(a) for a in affectations]
-    @staticmethod
-    def get_equipements_actifs_par_utilisateur(utilisateur_id):
-        equipements = AffectationDAO.get_equipements_actifs_by_utilisateur_id(utilisateur_id)
-        return [e.to_dict() for e in equipements]

@@ -42,3 +42,18 @@ class EquipmentDAO:
     def get_unassigned_equipments():
         subquery = db.session.query(Affectation.id_equipement).distinct().subquery()
         return Equipment.query.filter(~Equipment.id.in_(subquery)).all()
+
+    @staticmethod
+    def get_equipements_actifs_by_utilisateur_id(utilisateur_id):
+        return db.session.query(Equipment).join(Affectation).filter(
+            Affectation.id_utilisateur == utilisateur_id,
+            Equipment.est_actif == True
+        ).all()
+    @staticmethod
+    def desactiver_equipement(equipement_id):
+        equipement = Equipment.query.get(equipement_id)
+        if not equipement:
+            return False
+        equipement.est_actif = False
+        db.session.commit()
+        return True
