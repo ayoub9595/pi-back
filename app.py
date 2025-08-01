@@ -14,8 +14,6 @@ def create_app():
     migrate = Migrate(app, db)
     jwt = JWTManager(app)
     CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
-
-
     from src.controllers.equipment_controller import equipment_blueprint
     from src.controllers.utilisateur_controller import utilisateur_bp
     from src.controllers.authentification_controller import authentication_bp

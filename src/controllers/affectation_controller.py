@@ -45,10 +45,5 @@ def get_affectations_utilisateur(utilisateur_id):
     affectations = AffectationService.lister_affectations_par_utilisateur(utilisateur_id)
     return jsonify(affectations), 200
 
-@affectation_bp.route('/utilisateur/<int:utilisateur_id>/equipements-actifs', methods=['GET'])
-@jwt_required()
-@admin_or_self_required()
-def get_equipements_actifs_utilisateur(utilisateur_id):
-    equipements = AffectationService.get_equipements_actifs_par_utilisateur(utilisateur_id)
-    return jsonify(equipements), 200
+
 

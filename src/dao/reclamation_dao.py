@@ -12,7 +12,7 @@ class ReclamationDAO:
         return Reclamation.query.get(reclamation_id)
 
     @staticmethod
-    def create(id_utilisateur, id_equipement, description, date_reclamation=None,etat_reclamation="en attente"):
+    def create(id_utilisateur, id_equipement, description, date_reclamation=None,etat_reclamation="Non traitée"):
         reclamation = Reclamation(
             id_utilisateur=id_utilisateur,
             id_equipement=id_equipement,
@@ -35,6 +35,7 @@ class ReclamationDAO:
         reclamation.description = data.get('description', reclamation.description)
         reclamation.date_reclamation = data.get('date_reclamation', reclamation.date_reclamation)
         reclamation.etat_reclamation = data.get('etat_reclamation', reclamation.etat_reclamation)
+        reclamation.commentaire = data.get('commentaire', reclamation.commentaire)
 
         db.session.commit()
         return reclamation
@@ -56,3 +57,12 @@ class ReclamationDAO:
     @staticmethod
     def get_by_equipement_id(equipement_id):
         return Reclamation.query.filter_by(id_equipement=equipement_id).all()
+
+    @staticmethod
+    def set_etat(reclamation_id, etat):
+      reclamation = Reclamation.query.get(reclamation_id)
+      if not reclamation:
+        return None
+      reclamation.etat_reclamation = etat
+      db.session.commit()
+      return reclamation
