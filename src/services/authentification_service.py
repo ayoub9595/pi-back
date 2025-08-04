@@ -2,7 +2,7 @@ from src import db
 from src.models.authentification import Authentification
 from src.dao.utilisateur_dao import UtilisateurDAO
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, create_refresh_token
 from src.models.utilisateur import UserRole
 
 class AuthentificationService:
@@ -44,10 +44,12 @@ class AuthentificationService:
                 "email": utilisateur.email
             }
         )
+        refresh_token = create_refresh_token(identity=str(utilisateur.id))
 
         return {
             "msg": "Utilisateur créé avec succès",
-            "access_token": access_token
+            "access_token": access_token,
+            "refresh_token": refresh_token
         }
 
     @staticmethod
@@ -77,13 +79,25 @@ class AuthentificationService:
         if not success or not user:
             raise ValueError("Email ou mot de passe incorrect")
 
-        return create_access_token(
+        access_token = create_access_token(
             identity=str(user.id),
             additional_claims={
                 "role": user.role.value.upper(),
                 "email": user.email
             }
         )
+        refresh_token = create_refresh_token(
+            identity=str(user.id),
+            additional_claims={
+                "role": user.role.value.upper(),
+                "email": user.email
+            }
+        )
+
+        return {
+            "access_token": access_token,
+            "refresh_token": refresh_token
+        }
 
     @staticmethod
     def authentifier_utilisateur(email, mot_de_passe):
