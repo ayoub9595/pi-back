@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Affectation</title>
+</head>
+<body>
+<h2>Nouvelle affectation effectuée</h2>
+<h3>Utilisateur :</h3>
+<ul>
+    <li>Nom : {{ utilisateur.nom }}</li>
+    <li>Email : {{ utilisateur.email }}</li>
+</ul>
+
+<h3>Équipement :</h3>
+<ul>
+    <li>Nom : {{ equipment.nom }}</li>
+    <li>Numéro de série : {{ equipment.numero_serie }}</li>
+    <li>Date d'acquisition : {{ equipment.date_acquisition }}</li>
+</ul>
+
+<h3>Caractéristiques :</h3>
+<ul>
+    {% for c in caracteristiques %}
+    <li>{{ c.nom }} : {{ c.valeur }}</li>
+    {% endfor %}
+</ul>
+</body>
+</html>

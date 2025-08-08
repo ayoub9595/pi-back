@@ -105,3 +105,4 @@ class AffectationService:
     def lister_affectations_par_utilisateur(utilisateur_id):
         affectations = AffectationDAO.get_by_utilisateur_id(utilisateur_id)
         return [AffectationService._format_affectation(a) for a in affectations]
+

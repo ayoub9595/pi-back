@@ -1,5 +1,6 @@
 from typing import List, Optional
 from src.models.caracteristique_equipement import CaracteristiqueEquipment
+from src.models.equipment import Equipment
 from src import db
 
 class CaracteristiqueEquipmentDAO:
@@ -40,4 +41,7 @@ class CaracteristiqueEquipmentDAO:
     def delete_by_equipement_id(equipment_id: int) -> None:
      CaracteristiqueEquipment.query.filter_by(id_equipement=equipment_id).delete()
      db.session.commit()
-     
+
+    @staticmethod
+    def get_by_equipment_id(equipment_id: int) -> List[CaracteristiqueEquipment]:
+         return CaracteristiqueEquipment.query.filter_by(id_equipement=equipment_id).all()

@@ -7,6 +7,8 @@ from flask_jwt_extended import (
     jwt_required
 )
 from src.services.authentification_service import AuthentificationService
+from src.services.email_service import EmailService
+
 
 authentication_bp = Blueprint('auth', __name__)
 
@@ -49,3 +51,14 @@ def refresh_token():
         }
     )
     return jsonify(access_token=new_access_token), 200
+@authentication_bp.route('/test-email', methods=['GET'])
+def test_email():
+    try:
+        EmailService.envoyer_email(
+            subject="Test SMTP avec Flask",
+            recipients=["badiamohamedaymane@gmail.com"],
+            body="Bonjour,\n\nCeci est un test d'email depuis votre application Flask."
+        )
+        return jsonify({"msg": "Email envoyé avec succès"}), 200
+    except Exception as e:
+        return jsonify({"msg": f"Erreur lors de l'envoi : {str(e)}"}), 500

@@ -29,6 +29,9 @@ class CaracteristiqueEquipmentService:
     def delete_by_equipement_id(equipment_id: int) -> None:
       CaracteristiqueEquipmentDAO.delete_by_equipement_id(equipment_id)
 
-      
+    @staticmethod
+    def get_caracteristiques_by_equipment_id(equipment_id: int) -> List[Dict]:
+     caracteristiques = CaracteristiqueEquipmentDAO.get_by_equipment_id(equipment_id)
+     return [carac.to_dict() for carac in caracteristiques]
 
 
