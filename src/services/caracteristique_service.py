@@ -1,5 +1,7 @@
 from typing import List, Optional, Dict
 from src.dao.caracteristique_equipment_dao import CaracteristiqueEquipmentDAO
+from src.models.caracteristique_equipement import CaracteristiqueEquipment
+
 
 class CaracteristiqueEquipmentService:
     @staticmethod
@@ -28,6 +30,9 @@ class CaracteristiqueEquipmentService:
     @staticmethod
     def delete_by_equipement_id(equipment_id: int) -> None:
       CaracteristiqueEquipmentDAO.delete_by_equipement_id(equipment_id)
+    @staticmethod
+    def get_by_equipment_id(equipment_id: int) -> List[CaracteristiqueEquipment]:
+        return CaracteristiqueEquipment.query.filter_by(id_equipement=equipment_id).all()
 
       
 

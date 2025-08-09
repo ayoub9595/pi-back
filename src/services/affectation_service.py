@@ -3,6 +3,9 @@ from sqlalchemy.exc import IntegrityError
 from src.models.equipment import Equipment
 from src.models.utilisateur import Utilisateur
 from src.dao.affectation_dao import AffectationDAO
+from src.services.caracteristique_service import CaracteristiqueEquipmentService
+from src.services.email_service import EmailService
+
 
 class AffectationService:
 
@@ -46,9 +49,12 @@ class AffectationService:
         except (ValueError, TypeError):
             raise ValueError("Format de date invalide")
 
-        if not Equipment.query.get(id_equipement):
+        equipement = Equipment.query.get(id_equipement)
+        if not equipement:
             raise ValueError("Équipement inexistant")
-        if not Utilisateur.query.get(id_utilisateur):
+
+        utilisateur = Utilisateur.query.get(id_utilisateur)
+        if not utilisateur:
             raise ValueError("Utilisateur inexistant")
 
         try:
@@ -61,6 +67,25 @@ class AffectationService:
             )
         except IntegrityError:
             raise ValueError("Erreur d'intégrité lors de la création")
+
+        caracteristiques = CaracteristiqueEquipmentService.get_by_equipment_id(equipement.id)
+
+
+        affectation_dict = {
+            "id": affectation.id,
+            "date_debut": affectation.date_debut.isoformat() if affectation.date_debut else None,
+            "date_fin": affectation.date_fin.isoformat() if affectation.date_fin else None,
+            "determine": affectation.determine,
+            "utilisateur": utilisateur.to_dict(),
+            "equipement": equipement.to_dict()
+        }
+
+        affectation_dict["equipement"]["caracteristiques"] = caracteristiques
+
+        EmailService.envoyer_email_affectation(
+            affectation=affectation_dict,
+            recipient_email=utilisateur.email
+        )
 
         return AffectationService._format_affectation(affectation)
 
