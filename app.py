@@ -2,7 +2,7 @@ from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from flask_cors import CORS
-from src import db
+from src import db,mail
 from src.controllers.reclamation_controller import reclamation_bp
 
 def create_app():
@@ -11,6 +11,7 @@ def create_app():
     app.config.from_object('config.Config')
 
     db.init_app(app)
+    mail.init_app(app)
     migrate = Migrate(app, db)
     jwt = JWTManager(app)
     CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
@@ -28,6 +29,7 @@ def create_app():
     return app
 
 app = create_app()
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

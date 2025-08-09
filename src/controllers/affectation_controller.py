@@ -3,6 +3,8 @@ from flask_jwt_extended import jwt_required
 from src.services.affectation_service import AffectationService
 from src.decorators.auth_decorators import admin_required, admin_or_self_required
 from src.decorators.error_handlers import handle_value_error
+from src.services.email_service import EmailService
+from src.services.caracteristique_service import CaracteristiqueEquipmentService
 
 affectation_bp = Blueprint('affectation', __name__)
 
@@ -22,7 +24,6 @@ def recuperer_affectation(affectation_id):
 @handle_value_error
 def creer_affectation():
     data = request.json or {}
-    data['determine'] = data.get('determine', False)
     return jsonify(AffectationService.creer_affectation(data)), 201
 
 @affectation_bp.route('/<int:affectation_id>', methods=['PUT'])
@@ -44,6 +45,3 @@ def supprimer_affectation(affectation_id):
 def get_affectations_utilisateur(utilisateur_id):
     affectations = AffectationService.lister_affectations_par_utilisateur(utilisateur_id)
     return jsonify(affectations), 200
-
-
-
