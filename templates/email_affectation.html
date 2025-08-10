@@ -1,6 +1,62 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f8fa;
+            color: #333;
+        }
+
+        h2, h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            margin-bottom: 20px;
+            table-layout: fixed;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 10px 12px;
+            word-break: break-word;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(to right, #4a90e2, #357abd);
+            color: #fff;
+            font-weight: bold;
+        }
+
+        td {
+            border-top: 1px solid #e6e6e6;
+        }
+
+        .equipment-table th {
+            width: 40%;
+        }
+
+        .caracteristiques-table th {
+            width: 50%;
+        }
+
+        .caracteristiques-table tr:nth-child(even) td {
+            background-color: #f9fcff;
+        }
+    </style>
+</head>
 <body>
+
 <h2>Bonjour {{ utilisateur.nom }}</h2>
 
 {% if action == "creation" %}
@@ -8,25 +64,43 @@
 {% elif action == "suppression" %}
 <p>Nous vous informons que l'affectation suivante a été supprimée :</p>
 {% endif %}
-
-<ul>
-    <li>Nom de l'équipement : {{ equipement.nom }}</li>
-    <li>Numéro de série : {{ equipement.numero_serie }}</li>
-    <li>Date de début : {{ date_debut }}</li>
+<table class="equipment-table">
+    <tr>
+        <th>Nom de l'équipement</th>
+        <td>{{ equipement.nom }}</td>
+    </tr>
+    <tr>
+        <th>Numéro de série</th>
+        <td>{{ equipement.numero_serie }}</td>
+    </tr>
+    <tr>
+        <th>Date de début</th>
+        <td>{{ date_debut }}</td>
+    </tr>
     {% if determine %}
-    <li>Date de fin : {{ date_fin }}</li>
+    <tr>
+        <th>Date de fin</th>
+        <td>{{ date_fin }}</td>
+    </tr>
     {% endif %}
-</ul>
-
+</table>
 {% if caracteristiques %}
 <h3>Caractéristiques :</h3>
-<ul>
+<table class="caracteristiques-table">
+    <tr>
+        <th>Caractéristique</th>
+        <th>Valeur</th>
+    </tr>
     {% for c in caracteristiques %}
-    <li>{{ c.nom }} : {{ c.valeur }}</li>
+    <tr>
+        <td>{{ c.caracteristique if c.caracteristique else '-' }}</td>
+        <td>{{ c.valeur if c.valeur else '-' }}</td>
+    </tr>
     {% endfor %}
-</ul>
+</table>
 {% endif %}
 
 <p>Merci de votre compréhension.</p>
+
 </body>
 </html>

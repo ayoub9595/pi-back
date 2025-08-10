@@ -84,7 +84,8 @@ class AffectationService:
 
         EmailService.envoyer_email_affectation(
             affectation=affectation_dict,
-            recipient_email=utilisateur.email
+            recipient_email=utilisateur.email,
+            action="creation"
         )
 
         return AffectationService._format_affectation(affectation)
@@ -122,9 +123,24 @@ class AffectationService:
 
     @staticmethod
     def supprimer_affectation(affectation_id):
-        success = AffectationDAO.delete(affectation_id)
-        if not success:
-            raise ValueError("Affectation introuvable")
+      affectation = AffectationDAO.get_by_id(affectation_id)
+      if not affectation:
+        raise ValueError("Affectation introuvable")
+
+      affectation_dict = AffectationService._format_affectation(affectation)
+
+      if affectation_dict.get("equipement"):
+        equip_id = affectation_dict["equipement"]["id"]
+        affectation_dict["equipement"]["caracteristiques"] = CaracteristiqueEquipmentService.get_by_equipment_id(equip_id)
+
+      success = AffectationDAO.delete(affectation_id)
+      if not success:
+        raise ValueError("Erreur lors de la suppression de l'affectation")
+      EmailService.envoyer_email_affectation(
+        affectation=affectation_dict,
+        recipient_email=affectation_dict["utilisateur"]["email"],
+        action="suppression"
+      )
 
     @staticmethod
     def lister_affectations_par_utilisateur(utilisateur_id):
