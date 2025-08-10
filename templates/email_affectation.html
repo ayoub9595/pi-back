@@ -1,78 +1,32 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8" />
-    <title>Affectation d'Équipement</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            color: #333;
-            background-color: #f9f9f9;
-        }
-        h2 {
-            color: #0053ba;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-        tr.header {
-            background-color: #e6f0ff;
-        }
-    </style>
-</head>
+<html>
 <body>
-<h2>Nouvelle Affectation d'Équipement</h2>
+<h2>Bonjour {{ utilisateur.nom }}</h2>
 
-<p>Bonjour <strong>{{ utilisateur.nom }}</strong>,</p>
-<table>
-    <tr class="header">
-        <th>Champ</th>
-        <th>Valeur</th>
-    </tr>
-    <tr>
-        <td>Nom Utilisateur</td>
-        <td>{{ utilisateur.nom }}</td>
-    </tr>
-    <tr>
-        <td>Nom Equipement</td>
-        <td>{{ equipement.nom }}</td>
-    </tr>
+{% if action == "creation" %}
+<p>Nous vous informons qu'une nouvelle affectation vous a été attribuée :</p>
+{% elif action == "suppression" %}
+<p>Nous vous informons que l'affectation suivante a été supprimée :</p>
+{% endif %}
 
-    <tr>
+<ul>
+    <li>Nom de l'équipement : {{ equipement.nom }}</li>
+    <li>Numéro de série : {{ equipement.numero_serie }}</li>
+    <li>Date de début : {{ date_debut }}</li>
+    {% if determine %}
+    <li>Date de fin : {{ date_fin }}</li>
+    {% endif %}
+</ul>
 
-        <td>Date de début</td>
-        <td>{{ date_debut }}</td>
-    </tr>
-    <tr>
-        <td>Date de fin</td>
-        <td>{{ date_fin or "Non déterminée" }}</td>
-    </tr>
-    <tr>
-        <td>Déterminée</td>
-        <td>{{ "Oui" if determine else "Non" }}</td>
-    </tr>
-</table>
-
-<p><strong>Caractéristiques de l'équipement :</strong></p>
-<table>
-    <tr class="header">
-        <th>Caractéristique</th>
-        <th>Valeur</th>
-    </tr>
+{% if caracteristiques %}
+<h3>Caractéristiques :</h3>
+<ul>
     {% for c in caracteristiques %}
-    <tr>
-        <td>{{ c.caracteristique }}</td>
-        <td>{{ c.valeur }}</td>
-    </tr>
+    <li>{{ c.nom }} : {{ c.valeur }}</li>
     {% endfor %}
-</table>
+</ul>
+{% endif %}
+
+<p>Merci de votre compréhension.</p>
 </body>
 </html>
