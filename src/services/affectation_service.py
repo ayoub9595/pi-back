@@ -84,7 +84,8 @@ class AffectationService:
 
         EmailService.envoyer_email_affectation(
             affectation=affectation_dict,
-            recipient_email=utilisateur.email
+            recipient_email=utilisateur.email,
+            action="creation"
         )
 
         return AffectationService._format_affectation(affectation)
@@ -118,13 +119,50 @@ class AffectationService:
         except IntegrityError:
             raise ValueError("Erreur d'intégrité lors de la mise à jour")
 
-        return AffectationService._format_affectation(updated)
 
+        equipement = updated.equipement
+        utilisateur = updated.utilisateur
+        caracteristiques = CaracteristiqueEquipmentService.get_by_equipment_id(equipement.id) if equipement else []
+
+        affectation_dict = {
+            "id": updated.id,
+            "date_debut": updated.date_debut.isoformat() if updated.date_debut else None,
+            "date_fin": updated.date_fin.isoformat() if updated.date_fin else None,
+            "determine": updated.determine,
+            "utilisateur": utilisateur.to_dict() if utilisateur else None,
+            "equipement": equipement.to_dict() if equipement else None
+        }
+        if affectation_dict.get("equipement"):
+            affectation_dict["equipement"]["caracteristiques"] = caracteristiques
+
+
+        EmailService.envoyer_email_affectation(
+            affectation=affectation_dict,
+            recipient_email=utilisateur.email if utilisateur else None,
+            action="modification"
+        )
+
+        return AffectationService._format_affectation(updated)
     @staticmethod
     def supprimer_affectation(affectation_id):
+        affectation = AffectationDAO.get_by_id(affectation_id)
+        if not affectation:
+            raise ValueError("Affectation introuvable")
+
+        affectation_dict = AffectationService._format_affectation(affectation)
+
+        if affectation_dict.get("equipement"):
+            equip_id = affectation_dict["equipement"]["id"]
+            affectation_dict["equipement"]["caracteristiques"] = CaracteristiqueEquipmentService.get_by_equipment_id(equip_id)
+
         success = AffectationDAO.delete(affectation_id)
         if not success:
-            raise ValueError("Affectation introuvable")
+            raise ValueError("Erreur lors de la suppression de l'affectation")
+        EmailService.envoyer_email_affectation(
+            affectation=affectation_dict,
+            recipient_email=affectation_dict["utilisateur"]["email"],
+            action="suppression"
+        )
 
     @staticmethod
     def lister_affectations_par_utilisateur(utilisateur_id):

@@ -5,7 +5,7 @@ from src import mail
 
 class EmailService:
     @staticmethod
-    def envoyer_email_affectation(affectation, recipient_email=None):
+    def envoyer_email_affectation(affectation, recipient_email=None, action="creation"):
         try:
             utilisateur = affectation.get("utilisateur", {})
             equipement = affectation.get("equipement", {})
@@ -23,16 +23,25 @@ class EmailService:
                 caracteristiques=caracteristiques,
                 date_debut=affectation.get("date_debut"),
                 date_fin=affectation.get("date_fin"),
-                determine=affectation.get("determine")
+                determine=affectation.get("determine"),
+                action=action
             )
+            if action == "creation":
+                subject = "Nouvelle Affectation d'Équipement"
+            elif action == "suppression":
+                subject = "Suppression d'une Affectation"
+            elif action == "modification":
+                subject = "Modification d'une Affectation"
+            else:
+                subject = "Notification d'Affectation"
 
             msg = Message(
-                subject="Nouvelle Affectation d'Équipement",
+                subject=subject,
                 recipients=[recipient],
                 html=html_content
             )
             mail.send(msg)
-            logging.info(f"Email d'affectation envoyé à {recipient}")
+            logging.info(f"Email '{action}' envoyé à {recipient}")
 
         except Exception as e:
-            logging.error(f"Erreur lors de l'envoi de l'email d'affectation : {str(e)}")
+            logging.error(f"Erreur lors de l'envoi de l'email ({action}) : {str(e)}")

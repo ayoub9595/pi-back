@@ -1,78 +1,127 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8" />
-    <title>Affectation d'Équipement</title>
+    <meta charset="UTF-8">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background-color: #f4f6f8;
             color: #333;
-            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
         }
-        h2 {
-            color: #0053ba;
+
+        h2, h3 {
+            margin-top: 0;
+            color: #1a3d6d;
         }
+
         table {
-            width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            width: 100%;
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.06);
         }
+
         th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
+            padding: 12px 14px;
+            word-break: break-word;
             text-align: left;
+            vertical-align: middle;
+            font-size: 14px;
         }
-        tr.header {
-            background-color: #e6f0ff;
+
+        th {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        td {
+            border-top: 1px solid #e6e6e6;
+            background-color: #fff;
+        }
+
+        .equipment-table th {
+            width: 40%;
+        }
+
+        .caracteristiques-table th {
+            width: 50%;
+        }
+
+        .caracteristiques-table tr:nth-child(even) td {
+            background-color: #f7fbff;
+        }
+
+        p {
+            font-size: 15px;
+            margin: 0 0 15px 0;
+            color: #444;
+        }
+
+        h3 {
+            border-left: 4px solid #007bff;
+            padding-left: 8px;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-<h2>Nouvelle Affectation d'Équipement</h2>
 
-<p>Bonjour <strong>{{ utilisateur.nom }}</strong>,</p>
-<table>
-    <tr class="header">
-        <th>Champ</th>
-        <th>Valeur</th>
-    </tr>
+<h2>Bonjour {{ utilisateur.nom }}</h2>
+
+{% if action == "creation" %}
+    <p>Nous vous informons qu'une nouvelle affectation vous a été attribuée :</p>
+{% elif action == "suppression" %}
+    <p>Nous vous informons que l'affectation suivante a été supprimée :</p>
+{% elif action == "modification" %}
+    <p>Nous vous informons que l'affectation suivante a été modifiée :</p>
+{% endif %}
+
+<table class="equipment-table">
     <tr>
-        <td>Nom Utilisateur</td>
-        <td>{{ utilisateur.nom }}</td>
-    </tr>
-    <tr>
-        <td>Nom Equipement</td>
+        <th>Nom de l'équipement</th>
         <td>{{ equipement.nom }}</td>
     </tr>
-
     <tr>
-
-        <td>Date de début</td>
+        <th>Numéro de série</th>
+        <td>{{ equipement.numero_serie }}</td>
+    </tr>
+    <tr>
+        <th>Date de début</th>
         <td>{{ date_debut }}</td>
     </tr>
-    <tr>
-        <td>Date de fin</td>
-        <td>{{ date_fin or "Non déterminée" }}</td>
-    </tr>
-    <tr>
-        <td>Déterminée</td>
-        <td>{{ "Oui" if determine else "Non" }}</td>
-    </tr>
+    {% if determine %}
+        <tr>
+            <th>Date de fin</th>
+            <td>{{ date_fin }}</td>
+        </tr>
+    {% endif %}
 </table>
 
-<p><strong>Caractéristiques de l'équipement :</strong></p>
-<table>
-    <tr class="header">
-        <th>Caractéristique</th>
-        <th>Valeur</th>
-    </tr>
-    {% for c in caracteristiques %}
-    <tr>
-        <td>{{ c.caracteristique }}</td>
-        <td>{{ c.valeur }}</td>
-    </tr>
-    {% endfor %}
-</table>
+{% if caracteristiques %}
+    <h3>Caractéristiques :</h3>
+    <table class="caracteristiques-table">
+        <tr>
+            <th>Caractéristique</th>
+            <th>Valeur</th>
+        </tr>
+        {% for c in caracteristiques %}
+            <tr>
+                <td>{{ c.caracteristique if c.caracteristique else '-' }}</td>
+                <td>{{ c.valeur if c.valeur else '-' }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+<p>Merci de votre compréhension.</p>
+
 </body>
 </html>
