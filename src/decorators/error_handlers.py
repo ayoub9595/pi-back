@@ -17,7 +17,7 @@ def handle_integrity_error(f):
         try:
             return f(*args, **kwargs)
         except IntegrityError:
-            return jsonify({'error': 'Le numéro de série existe déjà.'}), 400
+            return jsonify({'msg': 'Le numéro de série existe déjà.'}), 400
         except Exception as e:
-            return jsonify({'error': str(e)}), 500
+            return jsonify({'msg': str(e)}), 500
     return decorated
