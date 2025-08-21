@@ -12,8 +12,8 @@ def create_app():
 
     db.init_app(app)
     mail.init_app(app)
-    migrate = Migrate(app, db)
-    jwt = JWTManager(app)
+    Migrate(app, db)
+    JWTManager(app)
     CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
     from src.controllers.equipment_controller import equipment_blueprint
     from src.controllers.utilisateur_controller import utilisateur_bp
@@ -32,4 +32,4 @@ app = create_app()
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, use_reloader=True, host='0.0.0.0', port=5000)
