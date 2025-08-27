@@ -2,6 +2,8 @@ import logging
 from flask_mail import Message
 from flask import render_template
 from src import mail
+from datetime import datetime
+
 
 class EmailService:
     @staticmethod
@@ -45,3 +47,93 @@ class EmailService:
 
         except Exception as e:
             logging.error(f"Erreur lors de l'envoi de l'email ({action}) : {str(e)}")
+
+    @staticmethod
+    def envoyer_email_reclamation_pour_admins(reclamation, recipient_email, action="creation"):
+        try:
+            if not recipient_email:
+                logging.warning("Adresse email destinataire manquante, email non envoyé")
+                return
+
+            utilisateur = reclamation.get("utilisateur", {})
+            equipement = reclamation.get("equipement", {})
+            caracteristiques = equipement.get("caracteristiques", [])
+
+            current_date = datetime.now().strftime("%d/%m/%Y à %H:%M")
+
+            html_content = render_template(
+                "email_reclamation_admins.html",
+                reclamation=reclamation,
+                utilisateur=utilisateur,
+                equipement=equipement,
+                caracteristiques=caracteristiques,
+                action=action,
+                current_date=current_date
+            )
+
+            if action == "creation":
+                subject = "Nouvelle Réclamation à Traiter"
+            elif action == "update":
+                subject = "Mise à Jour d'une Réclamation"
+            elif action == "resolved":
+                subject = "Réclamation Résolue"
+            else:
+                subject = "Notification de Réclamation"
+
+            msg = Message(
+                subject=subject,
+                recipients=[recipient_email],
+                html=html_content
+            )
+            mail.send(msg)
+            logging.info(f"Email de réclamation '{action}' envoyé à {recipient_email}")
+
+        except Exception as e:
+            logging.error(f"Erreur lors de l'envoi de l'email de réclamation ({action}) : {str(e)}")
+
+    @staticmethod
+    def envoyer_email_reclamation_pour_utilisateur(reclamation, recipient_email, action="creation"):
+        try:
+            if not recipient_email:
+                logging.warning("Adresse email destinataire manquante, email non envoyé")
+                return
+
+            utilisateur = reclamation.get("utilisateur", {})
+            equipement = reclamation.get("equipement", {})
+            caracteristiques = equipement.get("caracteristiques", [])
+
+            current_date = datetime.now().strftime("%d/%m/%Y à %H:%M")
+
+            html_content = render_template(
+                "email_reclamation_users.html",
+                reclamation=reclamation,
+                utilisateur=utilisateur,
+                equipement=equipement,
+                caracteristiques=caracteristiques,
+                action=action,
+                current_date=current_date
+            )
+
+            if action == "creation":
+                subject = "✅ Réclamation Enregistrée - Confirmation"
+            elif action == "update":
+                subject = "📝 Mise à Jour de votre Réclamation"
+            elif action == "resolved":
+                subject = "✅ Votre Réclamation a été Résolue"
+            elif action == "accepted":
+                subject = "✅ Votre Réclamation a été Acceptée"
+            elif action == "rejected":
+                subject = "❌ Mise à Jour de votre Réclamation"
+            else:
+                subject = "📬 Notification concernant votre Réclamation"
+
+            msg = Message(
+                subject=subject,
+                recipients=[recipient_email],
+                html=html_content
+            )
+            mail.send(msg)
+            logging.info(f"Email de confirmation de réclamation '{action}' envoyé à {recipient_email}")
+
+        except Exception as e:
+            logging.error(f"Erreur lors de l'envoi de l'email de confirmation de réclamation ({action}) : {str(e)}")
