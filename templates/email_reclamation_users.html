@@ -143,23 +143,29 @@
         <th>Nom</th>
         <td>{{ equipement.nom }}</td>
     </tr>
-    {% if equipement.marque %}
     <tr>
-        <th>Marque</th>
-        <td>{{ equipement.marque }}</td>
+        <th>Description</th>
+        <td>{{ equipement.description }}</td>
     </tr>
-    {% endif %}
-    {% if equipement.modele %}
     <tr>
-        <th>Modèle</th>
-        <td>{{ equipement.modele }}</td>
+        <th>Numéro de serie</th>
+        <td>{{ equipement.numero_serie }}</td>
     </tr>
-    {% endif %}
+    <tr>
+        <th>Date d'acquisition</th>
+        <td>{{ equipement.date_acquisition }}</td>
+    </tr>
+    <tr>
+        <th>Date de maintenance prévue</th>
+        <td>{{ equipement.maintenance_prevue }}</td>
+    </tr>
     <tr>
         <th>État</th>
-        <td>{{ equipement.etat }}</td>
+        <td>{{ 'Actif' if equipement.est_actif else 'Inactif' }}</td>
     </tr>
 </table>
+
+{% endif %}
 
 {% if caracteristiques %}
 <h3>⚙️ Caractéristiques de l'Équipement</h3>
@@ -175,7 +181,6 @@
     </tr>
     {% endfor %}
 </table>
-{% endif %}
 {% endif %}
 
 {% if reclamation.description %}
