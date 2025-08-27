@@ -49,3 +49,7 @@ class UtilisateurService:
         if not success:
             raise ValueError("Utilisateur introuvable pour suppression.")
         return success
+
+    @staticmethod
+    def lister_administrateurs():
+        return UtilisateurDAO.get_utilisateurs_by_role('ADMIN')

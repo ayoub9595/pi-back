@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation de Réclamation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        h2, h3 {
+            margin-top: 0;
+            color: #1a3d6d;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+        }
+
+        th, td {
+            padding: 12px 14px;
+            word-break: break-word;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        th {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            width: 35%;
+        }
+
+        td {
+            border-top: 1px solid #e6e6e6;
+            background-color: #fff;
+        }
+
+        .caracteristiques-table th {
+            width: 50%;
+        }
+
+        .caracteristiques-table tr:nth-child(even) td {
+            background-color: #f7fbff;
+        }
+
+        .description {
+            background-color: #f7fbff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 8px;
+            border: 1px solid #e6e6e6;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #dee2e6;
+            color: #6c757d;
+            font-size: 13px;
+        }
+
+
+        .reference-number {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .reference-number strong {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>✅ Réclamation Enregistrée</h2>
+<p>Votre demande a été enregistrée avec succès et sera traitée dans les plus brefs délais.</p>
+
+<div class="reference-number">
+    <strong>Numéro de Référence : #{{ reclamation.id }}</strong>
+</div>
+
+<table>
+    <tr>
+        <th>Date de Soumission</th>
+        <td>{{ reclamation.date_reclamation }}</td>
+    </tr>
+    <tr>
+        <th>État Actuel</th>
+        <td>{{ reclamation.etat_reclamation }}</td>
+    </tr>
+</table>
+
+{% if utilisateur %}
+<h3>👤 Utilisateur</h3>
+<table>
+    <tr>
+        <th>Nom</th>
+        <td>{{ utilisateur.nom }}</td>
+    </tr>
+    <tr>
+        <th>CIN</th>
+        <td>{{ utilisateur.cin }}</td>
+    </tr>
+    {% if utilisateur.telephone %}
+    <tr>
+        <th>Téléphone</th>
+        <td>{{ utilisateur.telephone }}</td>
+    </tr>
+    {% endif %}
+    {% if utilisateur.email %}
+    <tr>
+        <th>Email</th>
+        <td>{{ utilisateur.email }}</td>
+    </tr>
+    {% endif %}
+</table>
+{% endif %}
+
+{% if equipement %}
+<h3>🔧 Équipement Concerné</h3>
+<table>
+    <tr>
+        <th>Nom</th>
+        <td>{{ equipement.nom }}</td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td>{{ equipement.description }}</td>
+    </tr>
+    <tr>
+        <th>Numéro de serie</th>
+        <td>{{ equipement.numero_serie }}</td>
+    </tr>
+    <tr>
+        <th>Date d'acquisition</th>
+        <td>{{ equipement.date_acquisition }}</td>
+    </tr>
+    <tr>
+        <th>Date de maintenance prévue</th>
+        <td>{{ equipement.maintenance_prevue }}</td>
+    </tr>
+    <tr>
+        <th>État</th>
+        <td>{{ 'Actif' if equipement.est_actif else 'Inactif' }}</td>
+    </tr>
+</table>
+
+{% endif %}
+
+{% if caracteristiques %}
+<h3>⚙️ Caractéristiques de l'Équipement</h3>
+<table class="caracteristiques-table">
+    <tr>
+        <th>Caractéristique</th>
+        <th>Valeur</th>
+    </tr>
+    {% for c in caracteristiques %}
+    <tr>
+        <td>{{ c.caracteristique if c.caracteristique else '-' }}</td>
+        <td>{{ c.valeur if c.valeur else '-' }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if reclamation.description %}
+<h3>📝 Description du Problème</h3>
+<div class="description">
+    {{ reclamation.description }}
+</div>
+{% endif %}
+
+{% if reclamation.commentaire %}
+<h3>💬 Commentaires</h3>
+<div class="description">
+    {{ reclamation.commentaire }}
+</div>
+{% endif %}
+
+<div class="footer">
+    <p>Cet email a été envoyé automatiquement par le système de gestion des équipements.</p>
+    <p>Veuillez conserver votre numéro de référence pour le suivi de votre demande.</p>
+    <p><small>Date d'envoi : {{ current_date }}</small></p>
+</div>
+
+</body>
+</html>
