@@ -1,5 +1,3 @@
-# src/dao/utilisateur_dao.py
-
 from src import db
 from src.models.utilisateur import Utilisateur
 
@@ -60,3 +58,6 @@ class UtilisateurDAO:
         db.session.delete(utilisateur)
         db.session.commit()
         return True
+    @staticmethod
+    def get_utilisateurs_by_role(role):
+        return Utilisateur.query.filter_by(role=role).all()
