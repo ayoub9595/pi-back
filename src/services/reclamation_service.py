@@ -1,11 +1,9 @@
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 import logging
-
 from src.dao.affectation_dao import AffectationDAO
 from src.dao.equipment_dao import EquipmentDAO
 from src.dao.reclamation_dao import ReclamationDAO
-from src.dao.utilisateur_dao import UtilisateurDAO
 from src.models.equipment import Equipment
 from src.models.utilisateur import Utilisateur
 from src.services.email_service import EmailService
@@ -154,7 +152,6 @@ class ReclamationService:
                 EquipmentDAO.desactiver_equipement(updated.id_equipement)
                 AffectationDAO.supprimer_par_utilisateur_et_equipement(updated.id_utilisateur, updated.id_equipement)
 
-            # Notify user if the status changed
             if old_state != updated.etat_reclamation:
                 try:
                     if updated.etat_reclamation.lower() == 'acceptée':

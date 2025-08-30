@@ -92,12 +92,36 @@
 </head>
 <body>
 
-<h2>✅ Réclamation Enregistrée</h2>
-<p>Votre demande a été enregistrée avec succès et sera traitée dans les plus brefs délais.</p>
+<h2>
+    {% if action == "creation" %}
+    ✅ Réclamation Enregistrée
+    {% elif action == "accepted" %}
+    ✅ Réclamation Acceptée
+    {% elif action == "rejected" %}
+    ❌ Réclamation Rejetée
+    {% elif action == "resolved" %}
+    🎉 Réclamation Résolue
+    {% else %}
+    📝 Mise à jour de votre Réclamation
+    {% endif %}
+</h2>
 
-<div class="reference-number">
-    <strong>Numéro de Référence : #{{ reclamation.id }}</strong>
-</div>
+<p>
+    {% if action == "creation" %}
+    Votre demande a été enregistrée avec succès et sera traitée dans les plus brefs délais.
+    {% elif action == "accepted" %}
+    Votre réclamation a été acceptée par l'administration.
+    Veuillez consulter la réponse ci-dessous.
+    {% elif action == "rejected" %}
+    Votre réclamation a été rejetée.
+    Veuillez consulter la raison ci-dessous.
+    {% elif action == "resolved" %}
+    Votre réclamation a été résolue avec succès 🎉.
+    {% else %}
+    Votre réclamation a été mise à jour. Consultez les détails ci-dessous.
+    {% endif %}
+</p>
+
 
 <table>
     <tr>
@@ -185,13 +209,13 @@
 
 {% if reclamation.description %}
 <h3>📝 Description du Problème</h3>
-<div class="description">
+<div class="description">é
     {{ reclamation.description }}
 </div>
 {% endif %}
 
 {% if reclamation.commentaire %}
-<h3>💬 Commentaires</h3>
+<h3>📢 Réponse de l'Administration</h3>
 <div class="description">
     {{ reclamation.commentaire }}
 </div>
