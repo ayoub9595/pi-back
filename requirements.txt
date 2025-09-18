@@ -1,6 +1,7 @@
 alembic==1.16.4
 blinker==1.9.0
 click==8.2.1
+cryptography>=3.0.0
 filelock==3.19.1
 Flask==3.1.2
 flask-cors==6.0.1
