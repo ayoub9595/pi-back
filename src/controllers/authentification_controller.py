@@ -44,7 +44,8 @@ def refresh_token():
         identity=identity,
         additional_claims={
             "role": claims.get("role"),
-            "email": claims.get("email")
+            "email": claims.get("email"),
+            "nom": claims.get("nom"),
         }
     )
     return jsonify(access_token=new_access_token), 200

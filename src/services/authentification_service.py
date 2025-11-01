@@ -41,7 +41,8 @@ class AuthentificationService:
             identity=str(utilisateur.id),
             additional_claims={
                 "role": utilisateur.role.value.upper(),
-                "email": utilisateur.email
+                "email": utilisateur.email,
+                "nom": utilisateur.nom
             }
         )
         refresh_token = create_refresh_token(identity=str(utilisateur.id))
@@ -83,14 +84,16 @@ class AuthentificationService:
             identity=str(user.id),
             additional_claims={
                 "role": user.role.value.upper(),
-                "email": user.email
+                "email": user.email,
+                "nom": user.nom
             }
         )
         refresh_token = create_refresh_token(
             identity=str(user.id),
             additional_claims={
                 "role": user.role.value.upper(),
-                "email": user.email
+                "email": user.email,
+                "nom": user.nom
             }
         )
 
