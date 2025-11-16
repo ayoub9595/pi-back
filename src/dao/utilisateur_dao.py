@@ -32,11 +32,12 @@ class UtilisateurDAO:
         return Utilisateur.query.filter_by(email=email).first()
 
     @staticmethod
-    def update_utilisateur(utilisateur_id, nom=None, cin=None, telephone=None, role=None):
+    def update_utilisateur(utilisateur_id,email=None, nom=None, cin=None, telephone=None, role=None):
         utilisateur = Utilisateur.query.get(utilisateur_id)
         if not utilisateur:
             return None
-
+        if email is not None:
+            utilisateur.email = email
         if nom is not None:
             utilisateur.nom = nom
         if cin is not None:

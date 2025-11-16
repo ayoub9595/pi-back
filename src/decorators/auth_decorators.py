@@ -16,6 +16,7 @@ def admin_or_self_required(utilisateur_id_param="utilisateur_id"):
     def decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
+            verify_jwt_in_request()
             claims = get_jwt()
             role = claims.get('role')
             sub = claims.get('sub')
