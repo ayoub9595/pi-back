@@ -1,5 +1,8 @@
+import logging
+
 from src.dao.utilisateur_dao import UtilisateurDAO
 from src.decorators.error_handlers import ConflictError
+from src.services.email_service import EmailService
 
 
 class UtilisateurService:
@@ -34,18 +37,17 @@ class UtilisateurService:
 
     @staticmethod
     def mettre_a_jour_utilisateur(utilisateur_id, data):
-        # Check if user exists
+
         utilisateur_actuel = UtilisateurDAO.get_utilisateur_by_id(utilisateur_id)
+
         if not utilisateur_actuel:
             raise ValueError("Utilisateur introuvable pour mise à jour.")
 
-        # Check if email is being updated and already exists for another user
         if 'email' in data and data['email']:
             utilisateur_avec_email = UtilisateurDAO.get_utilisateur_by_email(data['email'])
             if utilisateur_avec_email and utilisateur_avec_email.id != utilisateur_id:
                 raise ConflictError("Cet email est déjà utilisé par un autre utilisateur.")
 
-        # Check if CIN is being updated and already exists for another user
         if 'cin' in data and data['cin']:
             utilisateur_avec_cin = UtilisateurDAO.get_utilisateur_by_cin(data['cin'])
             if utilisateur_avec_cin and utilisateur_avec_cin.id != utilisateur_id:
@@ -58,9 +60,22 @@ class UtilisateurService:
             cin=data.get('cin'),
             telephone=data.get('telephone'),
             role=data.get('role')
-        )
+            )
         if not utilisateur:
             raise ValueError("Erreur lors de la mise à jour de l'utilisateur.")
+
+        try:
+            # utilisateur_dict = {
+            #     'nom': utilisateur.nom,
+            #     'email': utilisateur.email,
+            #     'cin': utilisateur.cin,
+            #     'telephone': utilisateur.telephone,
+            #     'role': utilisateur.role
+            #         }
+            EmailService.envoyer_email_modification_utilisateur(utilisateur.to_dict())
+        except Exception as e:
+            logging.error(f"Erreur lors de l'envoi de l'email de modification : {str(e)}")
+
         return utilisateur
 
     @staticmethod

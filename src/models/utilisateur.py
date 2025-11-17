@@ -27,7 +27,7 @@ class Utilisateur(db.Model):
             'cin': self.cin,
             'email': self.email,
             'telephone': self.telephone,
-            'role': self.role.value,
+            'role': self.role.value.upper(),
         }
 
     def __repr__(self):

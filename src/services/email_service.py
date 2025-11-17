@@ -137,3 +137,29 @@ class EmailService:
 
         except Exception as e:
             logging.error(f"Erreur lors de l'envoi de l'email de confirmation de réclamation ({action}) : {str(e)}")
+
+    @staticmethod
+    def envoyer_email_modification_utilisateur(utilisateur, recipient_email=None):
+        try:
+            recipient = recipient_email or utilisateur.get("email")
+            if not recipient:
+                logging.warning("Adresse email destinataire manquante, email non envoyé")
+                return
+
+            html_content = render_template(
+                "email_modification_utilisateur.html",
+                utilisateur=utilisateur
+            )
+
+            subject = "Modification de vos Informations"
+
+            msg = Message(
+                subject=subject,
+                recipients=[recipient],
+                html=html_content
+            )
+            mail.send(msg)
+            logging.info(f"Email de modification d'utilisateur envoyé à {recipient}")
+
+        except Exception as e:
+            logging.error(f"Erreur lors de l'envoi de l'email de modification d'utilisateur : {str(e)}")

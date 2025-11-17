@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        h2, h3 {
+            margin-top: 0;
+            color: #1a3d6d;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+        }
+
+        th, td {
+            padding: 12px 14px;
+            word-break: break-word;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        th {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        td {
+            border-top: 1px solid #e6e6e6;
+            background-color: #fff;
+        }
+
+        .equipment-table th {
+            width: 40%;
+        }
+
+        p {
+            font-size: 15px;
+            margin: 0 0 15px 0;
+            color: #444;
+        }
+
+        h3 {
+            border-left: 4px solid #007bff;
+            padding-left: 8px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Bonjour {{ utilisateur.nom }}</h2>
+
+<p>Nous vous informons que vos informations personnelles ont été modifiées :</p>
+
+<table class="equipment-table">
+    <tr>
+        <th>Nom</th>
+        <td>{{ utilisateur.nom }}</td>
+    </tr>
+    {% if utilisateur.email %}
+    <tr>
+        <th>Email</th>
+        <td>{{ utilisateur.email }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <th>CIN</th>
+        <td>{{ utilisateur.cin }}</td>
+    </tr>
+    {% if utilisateur.telephone %}
+    <tr>
+        <th>Téléphone</th>
+        <td>{{ utilisateur.telephone }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <th>Rôle</th>
+        <td>{{ utilisateur.role }}</td>
+    </tr>
+</table>
+
+<p>Si vous n'êtes pas à l'origine de cette modification, veuillez contacter l'administrateur immédiatement.</p>
+
+<p>Merci de votre compréhension.</p>
+
+</body>
+</html>
