@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build: .
+    container_name: flask-app
+    platform: linux/arm64/v8
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+      - SECRET_KEY=my_precious_secret_key
+      - JWT_SECRET_KEY=my_precious_secret_key
+      - MAIL_USERNAME=badiamohamedaymane@gmail.com
+      - MAIL_PASSWORD=rxec prqd ubjd pmvy
+      - SQLALCHEMY_DATABASE_URI=mysql+pymysql://root:root@db:3306/parc_informatique
+    networks:
+      - mysql-network
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+networks:
+  mysql-network:
+    external: true
+    name: mysql-docker-compose_default
