@@ -4,6 +4,8 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 from src import db, mail
 from src.controllers.reclamation_controller import reclamation_bp
+from src.controllers.registration_controller import registration_bp
+
 
 def create_app():
     app = Flask(__name__)
@@ -26,6 +28,8 @@ def create_app():
     app.register_blueprint(authentication_bp, url_prefix="/auth")
     app.register_blueprint(affectation_bp, url_prefix="/affectations")
     app.register_blueprint(reclamation_bp, url_prefix="/reclamations")
+    app.register_blueprint(registration_bp,url_prefix="/registrations")
+
 
     with app.app_context():
         init_admin_user()

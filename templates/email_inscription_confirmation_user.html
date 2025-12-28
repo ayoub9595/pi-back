@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        h2,
+        h3 {
+            margin-top: 0;
+            color: #1a3d6d;
+        }
+
+        p {
+            font-size: 15px;
+            margin: 0 0 15px 0;
+            color: #444;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 13px;
+            color: #777;
+            border-top: 1px solid #e6e6e6;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Bonjour {{ nom }}</h2>
+
+    <p>Nous avons bien reçu votre demande d'inscription.</p>
+    <p>Votre demande est actuellement <strong>en attente de validation</strong> par un administrateur.</p>
+    <p>Vous recevrez un email de confirmation dès que votre compte sera activé.</p>
+
+    <div class="footer">
+        <p>Cordialement,<br>L'équipe Support</p>
+        <p>Ceci est un message automatique, merci de ne pas y répondre.</p>
+    </div>
+
+</body>
+
+</html>

@@ -163,3 +163,54 @@ class EmailService:
 
         except Exception as e:
             logging.error(f"Erreur lors de l'envoi de l'email de modification d'utilisateur : {str(e)}")
+
+    @staticmethod
+    def envoyer_email_confirmation_inscription_user(data):
+        try:
+            recipient = data.get('email')
+            if not recipient:
+                logging.warning("Adresse email destinataire manquante pour confirmation inscription")
+                return
+
+            html_content = render_template(
+                "email_inscription_confirmation_user.html",
+                nom=data.get('nom')
+            )
+
+            msg = Message(
+                subject="Confirmation de votre inscription",
+                recipients=[recipient],
+                html=html_content
+            )
+            mail.send(msg)
+            logging.info(f"Email de confirmation d'inscription envoyé à {recipient}")
+
+        except Exception as e:
+            logging.error(f"Erreur lors de l'envoi de l'email de confirmation d'inscription : {str(e)}")
+
+    @staticmethod
+    def envoyer_email_nouvelle_inscription_admins(data, admin_emails):
+        if not admin_emails:
+            logging.warning("Aucun email d'admin fourni pour la notification d'inscription")
+            return
+
+        try:
+            html_content = render_template(
+                "email_inscription_notification_admin.html",
+                nom=data.get('nom'),
+                email=data.get('email'),
+                cin=data.get('cin'),
+                telephone=data.get('telephone'),
+                role=data.get('role', 'Utilisateur')
+            )
+
+            msg = Message(
+                subject="Nouvelle demande d'inscription",
+                recipients=admin_emails,
+                html=html_content
+            )
+            mail.send(msg)
+            logging.info(f"Email de notification d'inscription envoyé aux admins : {admin_emails}")
+
+        except Exception as e:
+            logging.error(f"Erreur lors de l'envoi de l'email de notification aux admins : {str(e)}")
