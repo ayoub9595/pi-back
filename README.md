@@ -97,7 +97,10 @@ Les blueprints enregistrés (avec préfixes) :
 
 ## 🧪 Tests
 
-Aucun framework de test n'est fourni dans ce dépôt, mais vous pouvez ajouter des tests avec `pytest` ou `unittest` selon votre préférence.
+Les tests peuvent être ajoutés avec pytest :
+
+pip install pytest
+pytest
 
 ## 📝 Structure du projet
 
